@@ -10,7 +10,6 @@ class App extends Component {
 
 		this.state = {
 			monsters: [],
-			my_array: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18],
 		};
 	}
 
@@ -42,7 +41,6 @@ class App extends Component {
 						</div>
 					);
 				})}
-				{this.state.my_array.map((item) => console.log(item * 12))}
 			</div>
 		);
 	}

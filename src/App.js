@@ -1,8 +1,9 @@
 /** @format */
 
-import logo from './logo.svg';
-import './App.css';
 import { Component } from 'react';
+import './App.css';
+import CardList from './components/card-list/card-list.component';
+import SearchBox from './components/search-box/search-box.component';
 
 class App extends Component {
   // First react runs the constructor (Any language does this)
@@ -21,45 +22,35 @@ class App extends Component {
       .then((response) => response.json())
       .then((users) => {
         // When the state is changed, React knows he needs to re render the page
-        this.setState(
-          () => {
-            return { monsters: users };
-          },
-          () => {}
-        );
+        this.setState(() => {
+          return { monsters: users };
+        });
       });
   }
 
-  // render() determines what to show: Mount the initial state of the component and then goes to componentDidMount() function
+  onSearchChange = (event) => {
+    const searchField = event.target.value.toLowerCase();
 
+    this.setState(() => {
+      return {
+        searchField,
+      };
+    });
+  };
+
+  // render() determines what to show: Mount the initial state of the component and then goes to componentDidMount() function
   render() {
-    const filteredMonsters = this.state.monsters.filter((monster) => {
-      return monster.name.toLowerCase().includes(this.state.searchField);
+    const { monsters, searchField } = this.state;
+    const { onSearchChange } = this;
+    const filteredMonsters = monsters.filter((monster) => {
+      return monster.name.toLowerCase().includes(searchField);
     });
 
     return (
       <div className="App">
-        <input
-          className="search-box"
-          type="search"
-          placeholder="search monsters"
-          onChange={(event) => {
-            const searchField = event.target.value.toLowerCase();
-
-            this.setState(() => {
-              return {
-                searchField,
-              };
-            });
-          }}
-        />
-        {filteredMonsters.map((monster) => {
-          return (
-            <div key={monster.id}>
-              <h1>{monster.name}</h1>
-            </div>
-          );
-        })}
+        <h1 className="app-title">Super nice monsters</h1>
+        <SearchBox onChangeHandler={onSearchChange} placeholder="search monsters" className="monsters-search-box" />
+        <CardList monsters={filteredMonsters} />
       </div>
     );
   }
